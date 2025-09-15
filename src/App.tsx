@@ -27,7 +27,7 @@ export default function App(): ReactNode {
     async function setAsyncBuffer(name: string, from: AsyncBufferFrom) {
       const asyncBuffer = await asyncBufferFrom(from);
       const metadata = await parquetMetadataAsync(asyncBuffer);
-      const df = parquetDataFrame(from, metadata);
+      const df = parquetDataFrame(from, metadata, { utf8: false });
       setPageProps({
         metadata,
         df,
