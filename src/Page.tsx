@@ -14,6 +14,14 @@ export interface PageProps {
   byteLength?: number;
   setError: (e: unknown) => void;
   iframe?: boolean;
+  initialLens?: string;
+}
+
+function validateLens(lens?: string): Lens | undefined {
+  if (lens === "table" || lens === "metadata" || lens === "layout") {
+    return lens;
+  }
+  return undefined;
 }
 
 /**
@@ -28,8 +36,9 @@ export default function Page({
   byteLength,
   setError,
   iframe = false,
+  initialLens,
 }: PageProps): ReactNode {
-  const [lens, setLens] = useState<Lens>("table");
+  const [lens, setLens] = useState<Lens>(validateLens(initialLens) ?? "table");
 
   return (
     <>

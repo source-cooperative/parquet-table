@@ -18,6 +18,7 @@ export default function App(): ReactNode {
   const params = new URLSearchParams(location.search);
   const url = params.get("url") ?? undefined;
   const iframe = params.get("iframe") ? true : false;
+  const initialLens = params.get("lens") ?? undefined;
 
   const [error, setError] = useState<Error>();
   const [pageProps, setPageProps] = useState<PageProps>();
@@ -42,9 +43,10 @@ export default function App(): ReactNode {
         byteLength: from.byteLength,
         setError: setUnknownError,
         iframe,
+        initialLens,
       });
     },
-    [setUnknownError]
+    [setUnknownError, iframe, initialLens]
   );
 
   const onUrlDrop = useCallback(
