@@ -90,7 +90,13 @@ function RowGroups({ metadata }: { metadata: FileMetaData }) {
           >
             {rowGroup.columns.map((column, j) => {
               const key = `column-${i.toString()}-${j.toString()}`;
-              return <Column key={key} column={column} />;
+              return (
+                <Column
+                  key={key}
+                  column={column}
+                  columnCount={`${(j + 1).toString()}/${rowGroup.columns.length.toString()}`}
+                />
+              );
             })}
           </Group>
         );
@@ -99,7 +105,13 @@ function RowGroups({ metadata }: { metadata: FileMetaData }) {
   );
 }
 
-function Column({ column }: { column: ColumnChunk }) {
+function Column({
+  column,
+  columnCount,
+}: {
+  column: ColumnChunk;
+  columnCount: string;
+}) {
   if (!column.meta_data) return null;
   const { meta_data } = column;
   const { dictionary_page_offset, data_page_offset, index_page_offset } =
@@ -127,7 +139,7 @@ function Column({ column }: { column: ColumnChunk }) {
 
   return (
     <Group
-      name={`Column ${column.meta_data.path_in_schema.join(".")}`}
+      name={`Column ${columnCount} • ${column.meta_data.path_in_schema.join(".")}`}
       bytes={column.meta_data.total_compressed_size}
     >
       {children}

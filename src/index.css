@@ -303,15 +303,13 @@ input[type="file"] {
   margin: 10px;
   max-width: 480px;
 }
-.layout,
 .layout .group,
 .layout .cell {
   background-color: rgba(100, 100, 100, 0.05);
   border: 1px solid #ccc;
-  border-radius: 4px;
   font-size: 12px;
-  margin-top: 4px;
-  padding: 4px;
+  padding: 4px 20px;
+  margin-top: 8px;
   word-break: break-all;
 }
 .cell,
