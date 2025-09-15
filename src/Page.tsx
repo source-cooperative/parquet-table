@@ -13,6 +13,7 @@ export interface PageProps {
   name: string;
   byteLength?: number;
   setError: (e: unknown) => void;
+  iframe?: boolean;
 }
 
 /**
@@ -26,12 +27,13 @@ export default function Page({
   name,
   byteLength,
   setError,
+  iframe = false,
 }: PageProps): ReactNode {
   const [lens, setLens] = useState<Lens>("table");
 
   return (
     <>
-      <div className="top-header">{name}</div>
+      {iframe ? "" : <div className="top-header">{name}</div>}
       <div className="view-header">
         {byteLength !== undefined && (
           <span title={byteLength.toLocaleString() + " bytes"}>

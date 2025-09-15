@@ -17,6 +17,7 @@ import type { SortableDataFrame } from "hightable";
 export default function App(): ReactNode {
   const params = new URLSearchParams(location.search);
   const url = params.get("url") ?? undefined;
+  const iframe = params.get("iframe") ? true : false;
 
   const [error, setError] = useState<Error>();
   const [pageProps, setPageProps] = useState<PageProps>();
@@ -40,6 +41,7 @@ export default function App(): ReactNode {
         name,
         byteLength: from.byteLength,
         setError: setUnknownError,
+        iframe,
       });
     },
     [setUnknownError]
