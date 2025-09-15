@@ -12,3 +12,11 @@ npm run dev
 ```
 
 Then open http://localhost:5173 in your browser.
+
+## Usage
+
+The webapp can be configured using the following URL parameters:
+
+- `url`: URL of the Parquet file to load
+- `iframe`: if present, the app will be rendered in an iframe-friendly mode
+- `lens`: initial view mode, can be `table`, `metadata`, or `layout` (default: `table`)
