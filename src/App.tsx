@@ -11,6 +11,8 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import Dropzone from "./Dropzone.js";
 import Layout from "./Layout.js";
+import { toGeoAwareDf } from "./helpers.js";
+import type { SortableDataFrame } from "hightable";
 
 export default function App(): ReactNode {
   const params = new URLSearchParams(location.search);
@@ -27,10 +29,14 @@ export default function App(): ReactNode {
     async function setAsyncBuffer(name: string, from: AsyncBufferFrom) {
       const asyncBuffer = await asyncBufferFrom(from);
       const metadata = await parquetMetadataAsync(asyncBuffer);
-      const df = parquetDataFrame(from, metadata, { utf8: false });
+      const df = parquetDataFrame(from, metadata, {
+        utf8: false,
+      }) as SortableDataFrame; // parquetDataFrame always produces a SortableDataFrame, but it's not typed as such
+      // TODO(SL): remove this once hyparquet/hyparparam support geoparquet / geometry columns
+      const geoAwareDf = toGeoAwareDf(df, metadata);
       setPageProps({
         metadata,
-        df,
+        df: geoAwareDf,
         name,
         byteLength: from.byteLength,
         setError: setUnknownError,
