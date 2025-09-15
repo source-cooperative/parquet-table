@@ -306,7 +306,7 @@ input[type="file"] {
 .layout,
 .layout .group,
 .layout .cell {
-  background-color: rgba(100, 80, 180, 0.05);
+  background-color: rgba(100, 100, 100, 0.05);
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 12px;
