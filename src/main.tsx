@@ -1,10 +1,16 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import "hightable/src/HighTable.css";
+import "hyperparam/global.css";
+import "hyperparam/hyperparam.css";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+// import './index.css'
+import App from "./App.tsx";
 
-createRoot(document.getElementById('root')!).render(
+const app = document.getElementById("app");
+if (!app) throw new Error("missing app element");
+
+createRoot(app).render(
   <StrictMode>
     <App />
   </StrictMode>,
-)
+);

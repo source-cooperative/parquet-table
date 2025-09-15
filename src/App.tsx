@@ -1,35 +1,82 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import type { ReactNode } from "react";
+import Page, { type PageProps } from "./Page.js";
+import Welcome from "./Welcome.js";
 
-function App() {
-  const [count, setCount] = useState(0)
+import { byteLengthFromUrl, parquetMetadataAsync } from "hyparquet";
+import {
+  type AsyncBufferFrom,
+  asyncBufferFrom,
+  parquetDataFrame,
+} from "hyperparam";
+import { useCallback, useEffect, useState } from "react";
+import Dropzone from "./Dropzone.js";
+import Layout from "./Layout.js";
+
+export default function App(): ReactNode {
+  const params = new URLSearchParams(location.search);
+  const url = params.get("url") ?? undefined;
+
+  const [error, setError] = useState<Error>();
+  const [pageProps, setPageProps] = useState<PageProps>();
+
+  const setUnknownError = useCallback((e: unknown) => {
+    setError(e instanceof Error ? e : new Error(String(e)));
+  }, []);
+
+  const setAsyncBuffer = useCallback(
+    async function setAsyncBuffer(name: string, from: AsyncBufferFrom) {
+      const asyncBuffer = await asyncBufferFrom(from);
+      const metadata = await parquetMetadataAsync(asyncBuffer);
+      const df = parquetDataFrame(from, metadata);
+      setPageProps({
+        metadata,
+        df,
+        name,
+        byteLength: from.byteLength,
+        setError: setUnknownError,
+      });
+    },
+    [setUnknownError]
+  );
+
+  const onUrlDrop = useCallback(
+    (url: string) => {
+      // Add url=url to query string
+      const params = new URLSearchParams(location.search);
+      params.set("url", url);
+      history.pushState({}, "", `${location.pathname}?${params}`);
+      byteLengthFromUrl(url)
+        .then((byteLength) => setAsyncBuffer(url, { url, byteLength }))
+        .catch(setUnknownError);
+    },
+    [setUnknownError, setAsyncBuffer]
+  );
+
+  useEffect(() => {
+    if (!pageProps && url) {
+      onUrlDrop(url);
+    }
+  }, [url, pageProps, onUrlDrop]);
+
+  function onFileDrop(file: File) {
+    // Clear query string
+    history.pushState({}, "", location.pathname);
+    setAsyncBuffer(file.name, { file, byteLength: file.size }).catch(
+      setUnknownError
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Layout error={error}>
+      <Dropzone
+        onError={(e) => {
+          setError(e);
+        }}
+        onFileDrop={onFileDrop}
+        onUrlDrop={onUrlDrop}
+      >
+        {pageProps ? <Page {...pageProps} /> : <Welcome />}
+      </Dropzone>
+    </Layout>
+  );
 }
-
-export default App

@@ -2,12 +2,32 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <title>Source.coop Parquet file table</title>
+    <link rel="shortcut icon" href="/favicon/favicon-16x16.png" />
+    <link rel="icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
+    <!-- <link rel="stylesheet" href="demo/demo.css"> -->
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600&display=swap"/> -->
+    <meta
+      name="description"
+      content="A webapp that displays the contents of a remote Parquet file as a table."
+    />
+    <meta name="author" content="Source.coop" />
+    <meta name="keywords" content="parquet, remote, table" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
   </head>
   <body>
-    <div id="root"></div>
+    <nav class="sidebar">
+      <div>
+        <a class="brand" href="https://hyparam.github.io/demos/hyparquet/">
+          hyparquet
+        </a>
+      </div>
+    </nav>
+    <main id="content">
+      <div id="app"></div>
+    </main>
+    <input id="file-input" type="file" />
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

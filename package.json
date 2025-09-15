@@ -6,13 +6,18 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "format": "prettier --write .",
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "hightable": "0.18.5",
+    "hyparquet": "1.17.8",
+    "hyparquet-compressors": "^1.1.1",
+    "hyperparam": "0.3.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
@@ -25,6 +30,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "eslint-plugin-react-x": "^1.53.1",
     "globals": "^16.3.0",
+    "prettier": "^3.6.2",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",
     "vite": "^7.1.2"
