@@ -257,8 +257,73 @@ input[type="file"] {
   text-align: right;
 }
 
+.hightable {
+  --top-border-color: #666;
+  --focus-border-width: 2px;
+  --focus-border-color: #222;
+  --focus-background-color: #eee;
+  --focusable-border-color: #666;
+  --focusable-background-color: #f1f1f1;
+  --light-border-color: #c9c9c9;
+  --mock-row-label-background: #f1f1f1;
+
+  /* TODO(SL): remove once https://github.com/hyparam/hightable/issues/273 is fixed */
+  thead {
+    th {
+      background-color: #f1f1f1;
+      & > button {
+        background-color: #f1f1f1;
+        &:focus {
+          background-color: #dbdbdb;
+        }
+      }      
+    }
+    &:hover > button,
+    & > button:focus,
+    & > button:focus-visible,
+    & > button[aria-expanded="true"] {
+      background-color: #dbdbdb;
+    }
+  }
+  th[aria-sort]::after {
+    color: #d5d5d5;
+  }
+
+  thead [role="spinbutton"] {
+    &:hover {
+      background-color: #aaa;
+    }
+    &:focus {
+      background-color: #aaa;
+    }
+  }
+  tbody [role="rowheader"] {
+    background-color: #f1f1f1;
+  }
+  tr[aria-selected="true"] {
+    background-color: #bfbfbf;
+  }
+  tr[aria-selected="true"] [role="rowheader"] {
+    background-color: #bbb;
+  }
+  thead td:first-child {
+    background-color: #f9f9f9;
+  }
+  thead td:first-child[aria-disabled="false"] {
+    background: #f9f9f9;
+  }
+  @media (hover: hover) {
+    tbody tr:hover {
+      background-color: #dbdbdb;
+    }
+    tbody tr:hover td:first-child {
+      background-color: #ccc;
+    }
+  }
+}
+
 .hightable thead td:first-child {
-  background: url("https://hyperparam.app/assets/table/hyparquet.svg") #f9f4ff
+  background: url("assets/hyparquet.svg") #f9f9f9
     no-repeat center 6px;
   min-width: 0;
   width: 0;
