@@ -257,6 +257,17 @@ input[type="file"] {
   text-align: right;
 }
 
+.loading {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  font-size: 125%;
+  justify-content: center;
+}
+.loading::after {
+  content: "Loading…";
+}
+
 .hightable {
   --top-border-color: #666;
   --focus-border-width: 2px;

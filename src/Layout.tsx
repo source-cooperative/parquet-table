@@ -1,10 +1,9 @@
 import { ErrorBar, cn } from "hyperparam";
-import { type ReactNode, useEffect } from "react";
+import type { ReactNode } from "react";
 
 interface LayoutProps {
   children: ReactNode;
   className?: string;
-  progress?: number;
   error?: Error;
 }
 
@@ -15,36 +14,20 @@ interface LayoutProps {
  * @param {Object} props
  * @param {ReactNode} props.children - content to display inside the layout
  * @param {string | undefined} props.className - additional class names to apply to the content container
- * @param {number | undefined} props.progress - progress bar value
  * @param {Error} props.error - error message to display
  * @returns {ReactNode}
  */
 export default function Layout({
   children,
   className,
-  progress,
   error,
 }: LayoutProps): ReactNode {
-  // Update title
-  useEffect(() => {
-    document.title = "hyparquet demo - apache parquet file viewer online";
-  }, []);
-
   return (
     <>
       <div className="content-container">
         <div className={cn("content", className)}>{children}</div>
         <ErrorBar error={error} />
       </div>
-      {progress !== undefined && progress < 1 && (
-        <div className={"progress-bar"} role="progressbar">
-          <div
-            style={{
-              width: `${(100 * progress).toString()}%`,
-            }}
-          />
-        </div>
-      )}
     </>
   );
 }

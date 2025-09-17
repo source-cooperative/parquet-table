@@ -11,6 +11,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import Dropzone from "./Dropzone.js";
 import Layout from "./Layout.js";
+import Loading from "./Loading.js";
 import { toGeoAwareDf } from "./helpers.js";
 import { sortableDataFrame } from "hightable";
 
@@ -20,15 +21,17 @@ export default function App(): ReactNode {
   const iframe = params.get("iframe") ? true : false;
   const initialLens = params.get("lens") ?? undefined;
 
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
   const [pageProps, setPageProps] = useState<PageProps>();
 
   const setUnknownError = useCallback((e: unknown) => {
     setError(e instanceof Error ? e : new Error(String(e)));
+    setLoading(false);
   }, []);
 
   const setAsyncBuffer = useCallback(
-    async function setAsyncBuffer(name: string, from: AsyncBufferFrom) {
+    async function (name: string, from: AsyncBufferFrom) {
       const asyncBuffer = await asyncBufferFrom(from);
       const metadata = await parquetMetadataAsync(asyncBuffer);
       const df = sortableDataFrame(
@@ -47,12 +50,14 @@ export default function App(): ReactNode {
         iframe,
         initialLens,
       });
+      setLoading(false);
     },
     [setUnknownError, iframe, initialLens]
   );
 
   const onUrlDrop = useCallback(
     (url: string) => {
+      setLoading(true);
       // Add url=url to query string
       const params = new URLSearchParams(location.search);
       params.set("url", url);
@@ -71,6 +76,7 @@ export default function App(): ReactNode {
   }, [url, pageProps, onUrlDrop]);
 
   function onFileDrop(file: File) {
+    setLoading(true);
     // Clear query string
     history.pushState({}, "", location.pathname);
     setAsyncBuffer(file.name, { file, byteLength: file.size }).catch(
@@ -87,7 +93,13 @@ export default function App(): ReactNode {
         onFileDrop={onFileDrop}
         onUrlDrop={onUrlDrop}
       >
-        {pageProps ? <Page {...pageProps} /> : <Welcome />}
+        {loading ? (
+          <Loading />
+        ) : pageProps ? (
+          <Page {...pageProps} />
+        ) : (
+          <Welcome />
+        )}
       </Dropzone>
     </Layout>
   );
