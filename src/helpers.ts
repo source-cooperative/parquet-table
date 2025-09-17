@@ -1,13 +1,13 @@
-import type { SortableDataFrame, OrderBy, ResolvedValue } from "hightable";
+import type { DataFrame, OrderBy, ResolvedValue } from "hightable";
 import type { FileMetaData } from "hyparquet";
 import { decodeWKB } from "geoparquet";
 
 type Geometry = ReturnType<typeof decodeWKB>;
 
 export function toGeoAwareDf(
-  df: SortableDataFrame,
+  df: DataFrame,
   fileMetaData: FileMetaData
-): SortableDataFrame {
+): DataFrame {
   // detect geometry columns
   const geoMetadata = fileMetaData.key_value_metadata?.find(
     (kv) => kv.key === "geo"
@@ -30,7 +30,7 @@ export function toGeoAwareDf(
   const cachedGeometry = new Map<number, ResolvedValue<Geometry>>();
 
   // prepare the data frame
-  const header = [...df.header];
+  const columnDescriptors = df.columnDescriptors.map(d => structuredClone(d));
   const metadata = df.metadata ? structuredClone(df.metadata ?? {}) : undefined;
 
   function getRowNumber({ row, orderBy }: { row: number; orderBy?: OrderBy }) {
@@ -65,8 +65,10 @@ export function toGeoAwareDf(
     orderBy?: OrderBy;
     columns?: string[] | undefined;
     signal?: AbortSignal | undefined;
-  }) {
-    await df.fetch({ rowStart, rowEnd, orderBy, columns, signal });
+    }) {
+    if (df.fetch !== undefined) {
+      await df.fetch({ rowStart, rowEnd, orderBy, columns, signal });
+    }
 
     if (!columns || columns.includes(primaryColumn)) {
       for (let r = rowStart; r < rowEnd; r++) {
@@ -88,14 +90,13 @@ export function toGeoAwareDf(
       }
     }
 
-    df.eventTarget.dispatchEvent(new CustomEvent("resolve"));
+    df.eventTarget?.dispatchEvent(new CustomEvent("resolve"));
   }
 
   return {
-    sortable: true,
     numRows: df.numRows,
     metadata,
-    header,
+    columnDescriptors,
     getCell,
     getRowNumber,
     fetch,

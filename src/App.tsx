@@ -31,9 +31,11 @@ export default function App(): ReactNode {
     async function setAsyncBuffer(name: string, from: AsyncBufferFrom) {
       const asyncBuffer = await asyncBufferFrom(from);
       const metadata = await parquetMetadataAsync(asyncBuffer);
-      const df = sortableDataFrame(parquetDataFrame(from, metadata, {
-        utf8: false,
-      }))
+      const df = sortableDataFrame(
+        parquetDataFrame(from, metadata, {
+          utf8: false,
+        })
+      );
       // TODO(SL): remove this once hyparquet/hyparparam support geoparquet / geometry columns
       const geoAwareDf = toGeoAwareDf(df, metadata);
       setPageProps({
