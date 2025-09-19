@@ -1,3 +1,35 @@
+@font-face {
+  font-family: 'Berkeley Mono';
+  src: url('/fonts/BerkeleyMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Berkeley Mono';
+  src: url('/fonts/BerkeleyMono-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Berkeley Mono';
+  src: url('/fonts/BerkeleyMono-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Berkeley Mono';
+  src: url('/fonts/BerkeleyMono-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   --gray-1: #fcfcfc;
   --gray-5: #e0e0e0;
@@ -5,11 +37,14 @@
   --gray-11: #646464;
   --accent-8: var(--gray-8);
   --accent-11: var(--gray-11);
+  --font-ibm-plex: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --code-font-family: 'Berkeley Mono';
+  --default-font-family: var(--font-ibm-plex);
 }
 
 * {
   box-sizing: border-box;
-  font-family: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--default-font-family);
   margin: 0;
   padding: 0;
 }
@@ -33,7 +68,7 @@ p {
   margin: 15px 0;
 }
 code {
-  font-family: monospace;
+  font-family: var(--code-font-family);
   padding: 10px;
   white-space: pre-wrap;
   word-break: break-all;
@@ -115,9 +150,9 @@ main {
   border-bottom: 1px solid #ddd;
   background: #eee;
   display: flex;
-  font-family: "Courier New", Courier, monospace;
+  font-family: var(--code-font-family);
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
   height: 32px;
   justify-content: space-between;
   min-height: 32px;
@@ -333,18 +368,24 @@ input[type="file"] {
   }
 }
 
-.hightable thead td:first-child {
-  background: url("assets/hyparquet.svg") #f9f9f9
-    no-repeat center 6px;
-  min-width: 0;
-  width: 0;
-}
-
 .json {
   background-color: #22222b;
   padding-left: 20px;
 }
 
-[role="menu"] > button[role="menuitem"]  {
-  color: #444;
+.hightable {
+  thead td:first-child {
+    background: url("assets/hyparquet.svg") #f9f9f9
+      no-repeat center 6px;
+    min-width: 0;
+    width: 0;
+  }
+
+  [role="menu"] > button[role="menuitem"]  {
+    color: #444;
+  }
+
+  tbody [role="cell"] {
+    font-family: var(--code-font-family);
+  }
 }
