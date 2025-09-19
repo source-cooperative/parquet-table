@@ -170,12 +170,11 @@ main {
   background: #eee;
   display: flex;
   font-family: var(--code-font-family);
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 16px;
   height: 32px;
   justify-content: space-between;
   min-height: 32px;
-  padding-left: 20px;
+  padding-left: 8px;
   text-decoration-thickness: 1px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -364,6 +363,9 @@ input[type="file"] {
   }
   tbody [role="rowheader"] {
     background-color: #f1f1f1;
+    text-align: right;
+    padding-right: 8px;
+    font-family: var(--code-font-family);
   }
   tr[aria-selected="true"] {
     background-color: #bfbfbf;
@@ -394,8 +396,6 @@ input[type="file"] {
 
 .hightable {
   & thead td:first-child {
-    background: url("assets/hyparquet.svg") #f9f9f9
-      no-repeat center 6px;
     min-width: 0;
     width: 0;
   }
