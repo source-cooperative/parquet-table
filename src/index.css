@@ -393,18 +393,3 @@ input[type="file"] {
   background-color: #22222b;
   padding-left: 20px;
 }
-
-.hightable {
-  & thead td:first-child {
-    min-width: 0;
-    width: 0;
-  }
-
-  & [role="menu"] > button[role="menuitem"]  {
-    color: #444;
-  }
-
-  & tbody [role="cell"] {
-    font-family: var(--code-font-family);
-  }
-}
