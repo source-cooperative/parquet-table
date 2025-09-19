@@ -393,18 +393,18 @@ input[type="file"] {
 }
 
 .hightable {
-  thead td:first-child {
+  & thead td:first-child {
     background: url("assets/hyparquet.svg") #f9f9f9
       no-repeat center 6px;
     min-width: 0;
     width: 0;
   }
 
-  [role="menu"] > button[role="menuitem"]  {
+  & [role="menu"] > button[role="menuitem"]  {
     color: #444;
   }
 
-  tbody [role="cell"] {
+  & tbody [role="cell"] {
     font-family: var(--code-font-family);
   }
 }
