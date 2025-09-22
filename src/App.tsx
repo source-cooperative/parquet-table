@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import Page, { type PageProps } from "./Page.js";
 import Welcome from "./Welcome.js";
-
 import { byteLengthFromUrl, parquetMetadataAsync } from "hyparquet";
 import {
   type AsyncBufferFrom,
@@ -14,12 +13,14 @@ import Layout from "./Layout.js";
 import Loading from "./Loading.js";
 import { toGeoAwareDf } from "./helpers.js";
 import { sortableDataFrame } from "hightable";
+import { ThemeContext } from "./ThemeContext.js";
 
 export default function App(): ReactNode {
   const params = new URLSearchParams(location.search);
   const url = params.get("url") ?? undefined;
   const iframe = params.get("iframe") ? true : false;
   const initialLens = params.get("lens") ?? undefined;
+  const theme = (params.get("theme") ?? undefined) === "dark" ? "dark" : "light";
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
@@ -85,22 +86,24 @@ export default function App(): ReactNode {
   }
 
   return (
-    <Layout error={error}>
-      <Dropzone
-        onError={(e) => {
-          setError(e);
-        }}
-        onFileDrop={onFileDrop}
-        onUrlDrop={onUrlDrop}
-      >
-        {loading ? (
-          <Loading />
-        ) : pageProps ? (
-          <Page {...pageProps} />
-        ) : (
-          <Welcome />
-        )}
-      </Dropzone>
-    </Layout>
+    <ThemeContext value={theme}>
+      <Layout error={error}>
+        <Dropzone
+          onError={(e) => {
+            setError(e);
+          }}
+          onFileDrop={onFileDrop}
+          onUrlDrop={onUrlDrop}
+        >
+          {loading ? (
+            <Loading />
+          ) : pageProps ? (
+            <Page {...pageProps} />
+          ) : (
+            <Welcome />
+          )}
+        </Dropzone>
+      </Layout>
+    </ThemeContext>
   );
 }
