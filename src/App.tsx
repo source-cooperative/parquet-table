@@ -13,7 +13,6 @@ import Layout from "./Layout.js";
 import Loading from "./Loading.js";
 import { toGeoAwareDf } from "./helpers.js";
 import { sortableDataFrame } from "hightable";
-import { ThemeContext } from "./ThemeContext.js";
 
 export default function App(): ReactNode {
   const params = new URLSearchParams(location.search);
@@ -88,24 +87,22 @@ export default function App(): ReactNode {
   }
 
   return (
-    <ThemeContext value={theme}>
-      <Layout error={error}>
-        <Dropzone
-          onError={(e) => {
-            setError(e);
-          }}
-          onFileDrop={onFileDrop}
-          onUrlDrop={onUrlDrop}
-        >
-          {loading ? (
-            <Loading />
-          ) : pageProps ? (
-            <Page {...pageProps} />
-          ) : (
-            <Welcome />
-          )}
-        </Dropzone>
-      </Layout>
-    </ThemeContext>
+    <Layout error={error} data-theme={theme}>
+      <Dropzone
+        onError={(e) => {
+          setError(e);
+        }}
+        onFileDrop={onFileDrop}
+        onUrlDrop={onUrlDrop}
+      >
+        {loading ? (
+          <Loading />
+        ) : pageProps ? (
+          <Page {...pageProps} />
+        ) : (
+          <Welcome />
+        )}
+      </Dropzone>
+    </Layout>
   );
 }
