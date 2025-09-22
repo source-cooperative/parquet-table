@@ -20,7 +20,9 @@ export default function App(): ReactNode {
   const url = params.get("url") ?? undefined;
   const iframe = params.get("iframe") ? true : false;
   const initialLens = params.get("lens") ?? undefined;
-  const theme = (params.get("theme") ?? undefined) === "dark" ? "dark" : "light";
+
+  const defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  const theme = (params.get("theme") ?? defaultTheme) === "dark" ? "dark" : "light";
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
