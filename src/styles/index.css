@@ -327,18 +327,12 @@ input[type="file"] {
       background-color: #ccc;
     }
   }
+  & tbody [role="cell"] {
+    font-family: var(--code-font-family);
+  }
 }
 
 .json {
   background-color: #22222b;
   padding-left: 20px;
-}
-
-.hightable {
-  & [role="menu"] > button[role="menuitem"]  {
-    color: #444;
-  }
-  & tbody [role="cell"] {
-    font-family: var(--code-font-family);
-  }
 }
