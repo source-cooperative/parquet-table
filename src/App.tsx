@@ -20,9 +20,6 @@ export default function App(): ReactNode {
   const iframe = params.get("iframe") ? true : false;
   const initialLens = params.get("lens") ?? undefined;
 
-  const defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  const theme = (params.get("theme") ?? defaultTheme) === "dark" ? "dark" : "light";
-
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
   const [pageProps, setPageProps] = useState<PageProps>();
@@ -87,7 +84,7 @@ export default function App(): ReactNode {
   }
 
   return (
-    <Layout error={error} data-theme={theme}>
+    <Layout error={error}>
       <Dropzone
         onError={(e) => {
           setError(e);
