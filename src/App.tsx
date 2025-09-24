@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import Page, { type PageProps } from "./Page.js";
 import Welcome from "./Welcome.js";
-
 import { byteLengthFromUrl, parquetMetadataAsync } from "hyparquet";
 import {
   type AsyncBufferFrom,
