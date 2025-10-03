@@ -38,7 +38,7 @@ export default function Page({
   iframe = false,
   initialLens,
 }: PageProps): ReactNode {
-  const [lens, setLens] = useState<Lens>(validateLens(initialLens) ?? "table");
+  const [lens, setLens] = useState<Lens>(() => validateLens(initialLens) ?? "table");
 
   return (
     <>
