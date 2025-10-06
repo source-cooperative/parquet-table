@@ -20,9 +20,9 @@ export default function App(): ReactNode {
   const iframe = params.get("iframe") ? true : false;
   const initialLens = params.get("lens") ?? undefined;
 
-  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error>();
   const [pageProps, setPageProps] = useState<PageProps>();
+  const [loading, setLoading] = useState<boolean>(!pageProps && url !== undefined);
 
   const setUnknownError = useCallback((e: unknown) => {
     setError(e instanceof Error ? e : new Error(String(e)));
@@ -38,7 +38,7 @@ export default function App(): ReactNode {
           utf8: false,
         })
       );
-      // TODO(SL): remove this once hyparquet/hyparparam support geoparquet / geometry columns
+      // TODO(SL): remove this once hyparquet/hyparparam support geoparquet
       const geoAwareDf = toGeoAwareDf(df, metadata);
       setPageProps({
         metadata,
@@ -54,6 +54,14 @@ export default function App(): ReactNode {
     [setUnknownError, iframe, initialLens]
   );
 
+  useEffect(() => {
+    if (!pageProps && url !== undefined) {
+      byteLengthFromUrl(url)
+        .then((byteLength) => setAsyncBuffer(url, { url, byteLength }))
+        .catch(setUnknownError);
+    }
+  }, [url, pageProps, setUnknownError, setAsyncBuffer]);
+
   const onUrlDrop = useCallback(
     (url: string) => {
       setLoading(true);
@@ -67,12 +75,6 @@ export default function App(): ReactNode {
     },
     [setUnknownError, setAsyncBuffer]
   );
-
-  useEffect(() => {
-    if (!pageProps && url) {
-      onUrlDrop(url);
-    }
-  }, [url, pageProps, onUrlDrop]);
 
   function onFileDrop(file: File) {
     setLoading(true);
