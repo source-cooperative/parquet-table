@@ -4,6 +4,7 @@ import { Dropdown } from "hyperparam";
 import { type ReactNode, useState } from "react";
 import ParquetLayout from "./ParquetLayout.js";
 import ParquetMetadata from "./ParquetMetadata.js";
+import { limitColumns } from "./helpers.js";
 
 type Lens = "table" | "metadata" | "layout";
 
@@ -39,6 +40,10 @@ export default function Page({
   initialLens,
 }: PageProps): ReactNode {
   const [lens, setLens] = useState<Lens>(() => validateLens(initialLens) ?? "table");
+  // limit to 30 columns for performance (see https://github.com/source-cooperative/parquet-table/issues/13)
+  const limitedDf = limitColumns(df, { maxColumns: 30 })
+  const numColumns = df.columnDescriptors.length;
+  const limitedNumColumns = limitedDf.columnDescriptors.length;
 
   return (
     <>
@@ -49,7 +54,14 @@ export default function Page({
             {formatFileSize(byteLength)}
           </span>
         )}
-        <span>{df.numRows.toLocaleString()} rows</span>
+        <span>{df.numRows.toLocaleString()} row{df.numRows > 1 ? 's' : ''}</span>
+        {numColumns === limitedNumColumns ? (
+          <span>{numColumns.toLocaleString()} column{numColumns > 1 ? 's' : ''}</span>
+        ) : (
+          <span>
+            {numColumns.toLocaleString()} column{numColumns > 1 ? 's' : ''} (showing first {limitedNumColumns})
+          </span>
+        )}
         <Dropdown label={lens}>
           <button
             type="button"
@@ -82,7 +94,7 @@ export default function Page({
       {lens === "table" && (
         <HighTable
           cacheKey={name}
-          data={df}
+          data={limitedDf}
           onError={setError}
           className="hightable"
         />
