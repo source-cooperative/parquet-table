@@ -103,3 +103,14 @@ export function toGeoAwareDf(
     eventTarget: df.eventTarget,
   };
 }
+
+interface Options {
+  maxColumns: number;
+}
+
+export function limitColumns(df: DataFrame, options: Options): DataFrame {
+  return {
+    ...df,
+    columnDescriptors: df.columnDescriptors.slice(0, options.maxColumns)
+  }
+}
