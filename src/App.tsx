@@ -11,7 +11,6 @@ import { useCallback, useEffect, useState } from "react";
 import Dropzone from "./Dropzone.js";
 import Layout from "./Layout.js";
 import Loading from "./Loading.js";
-import { toGeoAwareDf } from "./helpers.js";
 import { sortableDataFrame } from "hightable";
 
 export default function App(): ReactNode {
@@ -38,11 +37,9 @@ export default function App(): ReactNode {
           utf8: false,
         })
       );
-      // TODO(SL): remove this once hyparquet/hyparparam support geoparquet
-      const geoAwareDf = toGeoAwareDf(df, metadata);
       setPageProps({
         metadata,
-        df: geoAwareDf,
+        df,
         name,
         byteLength: from.byteLength,
         setError: setUnknownError,
