@@ -1,14 +1,14 @@
-import type { FileMetaData } from "hyparquet";
-import { Json } from "hyperparam";
-import type { ReactNode } from "react";
+import type { FileMetaData } from 'hyparquet'
+import { Json } from 'hyperparam'
+import type { ReactNode } from 'react'
 
 interface MetadataProps {
-  metadata: FileMetaData;
+  metadata: FileMetaData
 }
 
 /**
  * Renders the metadata of a parquet file as JSON.
- * @param {Object} props
+ * @param {object} props
  * @param {FileMetaData} props.metadata
  * @returns {ReactNode}
  */
@@ -19,5 +19,5 @@ export default function ParquetMetadata({
     <code className="viewer json">
       <Json json={metadata} />
     </code>
-  );
+  )
 }

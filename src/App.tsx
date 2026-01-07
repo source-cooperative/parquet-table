@@ -1,42 +1,46 @@
-import type { ReactNode } from "react";
-import Page, { type PageProps } from "./Page.js";
-import Welcome from "./Welcome.js";
-import { byteLengthFromUrl, parquetMetadataAsync } from "hyparquet";
+import { sortableDataFrame } from 'hightable'
+import { byteLengthFromUrl, parquetMetadataAsync } from 'hyparquet'
 import {
   type AsyncBufferFrom,
   asyncBufferFrom,
   parquetDataFrame,
-} from "hyperparam";
-import { useCallback, useEffect, useState } from "react";
-import Dropzone from "./Dropzone.js";
-import Layout from "./Layout.js";
-import Loading from "./Loading.js";
-import { sortableDataFrame } from "hightable";
+} from 'hyperparam'
+import type { ReactNode } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
+import Dropzone from './Dropzone.js'
+import Layout from './Layout.js'
+import Loading from './Loading.js'
+import Page, { type PageProps } from './Page.js'
+import Welcome from './Welcome.js'
+
+/**
+ *
+ */
 export default function App(): ReactNode {
-  const params = new URLSearchParams(location.search);
-  const url = params.get("url") ?? undefined;
-  const iframe = params.get("iframe") ? true : false;
-  const initialLens = params.get("lens") ?? undefined;
+  const params = new URLSearchParams(location.search)
+  const url = params.get('url') ?? undefined
+  const iframe = params.get('iframe') ? true : false
+  const initialLens = params.get('lens') ?? undefined
 
-  const [error, setError] = useState<Error>();
-  const [pageProps, setPageProps] = useState<PageProps>();
-  const [loading, setLoading] = useState<boolean>(!pageProps && url !== undefined);
+  const [error, setError] = useState<Error>()
+  const [pageProps, setPageProps] = useState<PageProps>()
+  const [loading, setLoading] = useState<boolean>(!pageProps && url !== undefined)
 
   const setUnknownError = useCallback((e: unknown) => {
-    setError(e instanceof Error ? e : new Error(String(e)));
-    setLoading(false);
-  }, []);
+    setError(e instanceof Error ? e : new Error(String(e)))
+    setLoading(false)
+  }, [])
 
   const setAsyncBuffer = useCallback(
     async function (name: string, from: AsyncBufferFrom) {
-      const asyncBuffer = await asyncBufferFrom(from);
-      const metadata = await parquetMetadataAsync(asyncBuffer);
+      const asyncBuffer = await asyncBufferFrom(from)
+      const metadata = await parquetMetadataAsync(asyncBuffer)
       const df = sortableDataFrame(
         parquetDataFrame(from, metadata, {
           utf8: false,
-        })
-      );
+        }),
+      )
       setPageProps({
         metadata,
         df,
@@ -45,60 +49,68 @@ export default function App(): ReactNode {
         setError: setUnknownError,
         iframe,
         initialLens,
-      });
-      setLoading(false);
+      })
+      setLoading(false)
     },
-    [setUnknownError, iframe, initialLens]
-  );
+    [setUnknownError, iframe, initialLens],
+  )
 
   useEffect(() => {
     if (!pageProps && url !== undefined) {
       byteLengthFromUrl(url)
-        .then((byteLength) => setAsyncBuffer(url, { url, byteLength }))
-        .catch(setUnknownError);
+        .then(byteLength => setAsyncBuffer(url, { url, byteLength }))
+        .catch(setUnknownError)
     }
-  }, [url, pageProps, setUnknownError, setAsyncBuffer]);
+  }, [url, pageProps, setUnknownError, setAsyncBuffer])
 
   const onUrlDrop = useCallback(
     (url: string) => {
-      setLoading(true);
+      setLoading(true)
       // Add url=url to query string
-      const params = new URLSearchParams(location.search);
-      params.set("url", url);
-      history.pushState({}, "", `${location.pathname}?${params}`);
+      const params = new URLSearchParams(location.search)
+      params.set('url', url)
+      history.pushState({}, '', `${location.pathname}?${params}`)
       byteLengthFromUrl(url)
-        .then((byteLength) => setAsyncBuffer(url, { url, byteLength }))
-        .catch(setUnknownError);
+        .then(byteLength => setAsyncBuffer(url, { url, byteLength }))
+        .catch(setUnknownError)
     },
-    [setUnknownError, setAsyncBuffer]
-  );
+    [setUnknownError, setAsyncBuffer],
+  )
 
+  /**
+   *
+   * @param file
+   */
   function onFileDrop(file: File) {
-    setLoading(true);
+    setLoading(true)
     // Clear query string
-    history.pushState({}, "", location.pathname);
+    history.pushState({}, '', location.pathname)
     setAsyncBuffer(file.name, { file, byteLength: file.size }).catch(
-      setUnknownError
-    );
+      setUnknownError,
+    )
   }
 
   return (
     <Layout error={error}>
       <Dropzone
         onError={(e) => {
-          setError(e);
+          setError(e)
         }}
         onFileDrop={onFileDrop}
         onUrlDrop={onUrlDrop}
       >
-        {loading ? (
-          <Loading />
-        ) : pageProps ? (
-          <Page {...pageProps} />
-        ) : (
-          <Welcome />
-        )}
+        {loading
+          ? (
+              <Loading />
+            )
+          : pageProps
+            ? (
+                <Page {...pageProps} />
+              )
+            : (
+                <Welcome />
+              )}
       </Dropzone>
     </Layout>
-  );
+  )
 }

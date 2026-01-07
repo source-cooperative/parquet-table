@@ -1,10 +1,10 @@
-import React, { type ReactNode, useEffect, useRef, useState } from "react";
+import React, { type ReactNode, useEffect, useRef, useState } from 'react'
 
 interface DropzoneProps {
-  children: ReactNode;
-  onFileDrop: (file: File) => void;
-  onUrlDrop: (url: string) => void;
-  onError: (error: Error) => void;
+  children: ReactNode
+  onFileDrop: (file: File) => void
+  onUrlDrop: (url: string) => void
+  onError: (error: Error) => void
 }
 
 /**
@@ -14,8 +14,7 @@ interface DropzoneProps {
  *
  * You can have an element inside the dropzone that triggers the file input
  * dialog when clicked by adding the class 'dropzone-select' to it.
- *
- * @param {Object} props
+ * @param {object} props
  * @param {ReactNode} props.children - message to display in dropzone.
  * @param {Function} props.onFileDrop - called when a file is dropped.
  * @param {Function} props.onUrlDrop - called when a url is dropped.
@@ -27,10 +26,10 @@ export default function Dropzone({
   onFileDrop,
   onUrlDrop,
 }: DropzoneProps): ReactNode {
-  const dropzoneRef = useRef<HTMLDivElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const dropzoneRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   // number of dragenter events minus dragleave events
-  const [enters, setEnters] = useState(0);
+  const [enters, setEnters] = useState(0)
 
   /**
    * Trigger file input dialog.
@@ -38,8 +37,8 @@ export default function Dropzone({
    */
   function triggerFileSelect(e: React.MouseEvent<HTMLDivElement>) {
     // If click inside '.dropzone', activate file input dialog
-    if ((e.target as Element).classList.contains("dropzone")) {
-      fileInputRef.current?.click();
+    if ((e.target as Element).classList.contains('dropzone')) {
+      fileInputRef.current?.click()
     }
   }
 
@@ -50,77 +49,93 @@ export default function Dropzone({
    * @returns {void}
    */
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>): void {
-    const { files } = e.target;
-    const file = files?.[0];
+    const { files } = e.target
+    const file = files?.[0]
     if (files?.length !== 1 || !file) {
-      return;
+      return
     }
-    onFileDrop(file);
+    onFileDrop(file)
   }
 
   useEffect(() => {
-    const dropzone = dropzoneRef.current;
-    if (!dropzone) return;
+    const dropzone = dropzoneRef.current
+    if (!dropzone) return
 
     // Attach drag-and-drop event listeners
+    /**
+     *
+     * @param e
+     */
     function onDragEnter(e: DragEvent) {
       // check if any of the items are files (not strings)
-      const items = e.dataTransfer?.items;
-      if (!items) return;
-      if (!Array.from(items).some((item) => item.kind === "file")) return;
-      setEnters((enters) => enters + 1);
+      const items = e.dataTransfer?.items
+      if (!items) return
+      if (!Array.from(items).some(item => item.kind === 'file')) return
+      setEnters(enters => enters + 1)
     }
+    /**
+     *
+     * @param e
+     */
     function onDragOver(e: DragEvent) {
-      e.preventDefault();
+      e.preventDefault()
     }
+    /**
+     *
+     * @param e
+     */
     function onDragLeave(e: DragEvent) {
-      const items = e.dataTransfer?.items;
-      if (!items) return;
-      if (!Array.from(items).some((item) => item.kind === "file")) return;
-      setEnters((enters) => enters - 1);
+      const items = e.dataTransfer?.items
+      if (!items) return
+      if (!Array.from(items).some(item => item.kind === 'file')) return
+      setEnters(enters => enters - 1)
     }
+    /**
+     *
+     * @param e
+     */
     function handleFileDrop(e: DragEvent) {
-      e.preventDefault();
-      setEnters(0);
+      e.preventDefault()
+      setEnters(0)
 
-      if (!e.dataTransfer) throw new Error("Missing dataTransfer");
-      const { files, items } = e.dataTransfer;
+      if (!e.dataTransfer) throw new Error('Missing dataTransfer')
+      const { files, items } = e.dataTransfer
       if (files.length > 0) {
-        const file = files[0];
+        const file = files[0]
         if (!file) {
-          return;
+          return
         }
-        onFileDrop(file);
+        onFileDrop(file)
       }
       if (items.length > 0) {
-        const item = items[0];
-        if (item?.kind === "string") {
+        const item = items[0]
+        if (item?.kind === 'string') {
           item.getAsString((url) => {
-            if (url.startsWith("http")) {
-              onUrlDrop(url);
+            if (url.startsWith('http')) {
+              onUrlDrop(url)
             }
-          });
+          })
         }
       }
     }
 
-    window.addEventListener("dragenter", onDragEnter);
-    window.addEventListener("dragover", onDragOver);
-    window.addEventListener("dragleave", onDragLeave);
-    dropzone.addEventListener("drop", handleFileDrop);
+    window.addEventListener('dragenter', onDragEnter)
+    window.addEventListener('dragover', onDragOver)
+    window.addEventListener('dragleave', onDragLeave)
+    dropzone.addEventListener('drop', handleFileDrop)
 
     // Cleanup event listeners when component is unmounted
     return () => {
-      window.removeEventListener("dragenter", onDragEnter);
-      window.removeEventListener("dragover", onDragOver);
-      window.removeEventListener("dragleave", onDragLeave);
-      dropzone.removeEventListener("drop", handleFileDrop);
-    };
-  });
+      window.removeEventListener('dragenter', onDragEnter)
+      window.removeEventListener('dragover', onDragOver)
+      window.removeEventListener('dragleave', onDragLeave)
+      dropzone.removeEventListener('drop', handleFileDrop)
+    }
+  })
 
   return (
     <div
-      className={enters > 0 ? "dropzone hover" : "dropzone"}
+      className={enters > 0 ? 'dropzone hover' : 'dropzone'}
       onClick={triggerFileSelect}
       ref={dropzoneRef}
     >
@@ -133,9 +148,9 @@ export default function Dropzone({
       <input
         onChange={handleFileSelect}
         ref={fileInputRef}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
         type="file"
       />
     </div>
-  );
+  )
 }
