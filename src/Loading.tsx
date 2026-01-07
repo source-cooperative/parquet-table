@@ -8,9 +8,9 @@ interface LoadingProps {
 /**
  * Loading component.
  * div style can be overridden by className prop.
- * @param {object} props
- * @param {string | undefined} props.className - additional class names to apply to the div
- * @returns {ReactNode}
+ * @param props Component props
+ * @param props.className - additional class names to apply to the div
+ * @returns ReactNode
  */
 export default function Loading({ className }: LoadingProps): ReactNode {
   return <div className={cn('loading', className)}></div>

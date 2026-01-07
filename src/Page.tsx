@@ -20,8 +20,9 @@ export interface PageProps {
 }
 
 /**
- *
- * @param lens
+ * Validate lens value.
+ * @param lens - lens string
+ * @returns Validated lens or undefined
  */
 function validateLens(lens?: string): Lens | undefined {
   if (lens === 'table' || lens === 'metadata' || lens === 'layout') {
@@ -32,15 +33,15 @@ function validateLens(lens?: string): Lens | undefined {
 
 /**
  * Hyparquet demo viewer page
- * @param {object} props
- * @param props.metadata
- * @param props.df
- * @param props.name
- * @param props.byteLength
- * @param props.setError
- * @param props.iframe
- * @param props.initialLens
- * @returns {ReactNode}
+ * @param props Component props
+ * @param props.metadata - parquet file metadata
+ * @param props.df - data frame
+ * @param props.name - file name
+ * @param props.byteLength - file size in bytes
+ * @param props.setError - error handler
+ * @param props.iframe - whether to render in iframe mode
+ * @param props.initialLens - initial lens to display
+ * @returns ReactNode
  */
 export default function Page({
   metadata,

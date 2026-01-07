@@ -15,7 +15,8 @@ import Page, { type PageProps } from './Page.js'
 import Welcome from './Welcome.js'
 
 /**
- *
+ * Main App component.
+ * @returns App React node
  */
 export default function App(): ReactNode {
   const params = new URLSearchParams(location.search)
@@ -78,8 +79,8 @@ export default function App(): ReactNode {
   )
 
   /**
-   *
-   * @param file
+   * Handle file drop.
+   * @param file Dropped file
    */
   function onFileDrop(file: File) {
     setLoading(true)

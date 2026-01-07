@@ -8,10 +8,10 @@ interface LayoutProps {
 
 /**
  * Renders the file layout of a parquet file as nested rowgroups and columns.
- * @param {object} props
- * @param {number} props.byteLength
- * @param {FileMetaData} props.metadata
- * @returns {ReactNode}
+ * @param props Component props
+ * @param props.byteLength - file size in bytes
+ * @param props.metadata - parquet file metadata
+ * @returns ReactNode
  */
 export default function ParquetLayout({
   byteLength,
@@ -34,11 +34,12 @@ export default function ParquetLayout({
 }
 
 /**
- *
- * @param root0
- * @param root0.name
- * @param root0.start
- * @param root0.end
+ * Cell component representing a byte range.
+ * @param props Component props
+ * @param props.name - cell name
+ * @param props.start - start byte offset
+ * @param props.end - end byte offset
+ * @returns ReactNode
  */
 function Cell<N extends bigint | number>({
   name,
@@ -72,11 +73,12 @@ function Cell<N extends bigint | number>({
 }
 
 /**
- *
- * @param root0
- * @param root0.children
- * @param root0.name
- * @param root0.bytes
+ * Row group component.
+ * @param props Component props
+ * @param props.children - child React nodes
+ * @param props.name - group name
+ * @param props.bytes - group byte size
+ * @returns ReactNode
  */
 function Group({
   children,
@@ -101,9 +103,10 @@ function Group({
 }
 
 /**
- *
- * @param root0
- * @param root0.metadata
+ * Row groups component.
+ * @param props Component props
+ * @param props.metadata - parquet file metadata
+ * @returns ReactNode
  */
 function RowGroups({ metadata }: { metadata: FileMetaData }) {
   return (
@@ -134,10 +137,11 @@ function RowGroups({ metadata }: { metadata: FileMetaData }) {
 }
 
 /**
- *
- * @param root0
- * @param root0.column
- * @param root0.columnCount
+ * Column component.
+ * @param props Component props
+ * @param props.column - column chunk
+ * @param props.columnCount - column count string
+ * @returns ReactNode
  */
 function Column({
   column,
@@ -182,9 +186,10 @@ function Column({
 }
 
 /**
- *
- * @param root0
- * @param root0.metadata
+ * Column indexes component.
+ * @param props Component props
+ * @param props.metadata - parquet file metadata
+ * @returns ReactNode
  */
 function ColumnIndexes({ metadata }: { metadata: FileMetaData }) {
   // find column and offset indexes
@@ -226,8 +231,11 @@ function ColumnIndexes({ metadata }: { metadata: FileMetaData }) {
 
 /**
  * Find the start byte offset for a column chunk.
- * @param {ColumnMetaData} columnMetadata
- * @returns {[bigint, bigint]} byte offset range
+ * @param columnMetadata - column metadata
+ * @param columnMetadata.dictionary_page_offset - dictionary page offset
+ * @param columnMetadata.data_page_offset - data page offset
+ * @param columnMetadata.total_compressed_size - total compressed size
+ * @returns  byte offset range
  */
 function getColumnRange({
   dictionary_page_offset,

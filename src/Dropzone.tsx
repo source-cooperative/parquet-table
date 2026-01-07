@@ -14,12 +14,11 @@ interface DropzoneProps {
  *
  * You can have an element inside the dropzone that triggers the file input
  * dialog when clicked by adding the class 'dropzone-select' to it.
- * @param {object} props
- * @param {ReactNode} props.children - message to display in dropzone.
- * @param {Function} props.onFileDrop - called when a file is dropped.
- * @param {Function} props.onUrlDrop - called when a url is dropped.
- * @param {Function} props.onError  - called when an error occurs.
- * @returns {ReactNode}
+ * @param props Component props
+ * @param props.children - message to display in dropzone.
+ * @param props.onFileDrop - called when a file is dropped.
+ * @param props.onUrlDrop - called when a url is dropped.
+ * @returns Dropzone React node
  */
 export default function Dropzone({
   children,
@@ -33,7 +32,7 @@ export default function Dropzone({
 
   /**
    * Trigger file input dialog.
-   * @param {MouseEvent} e - click
+   * @param e - click
    */
   function triggerFileSelect(e: React.MouseEvent<HTMLDivElement>) {
     // If click inside '.dropzone', activate file input dialog
@@ -45,8 +44,7 @@ export default function Dropzone({
   /**
    * Handle file selection event.
    * Recursively upload files and directories, in parallel.
-   * @param {ChangeEvent} e
-   * @returns {void}
+   * @param e - file input change event
    */
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>): void {
     const { files } = e.target
@@ -63,8 +61,8 @@ export default function Dropzone({
 
     // Attach drag-and-drop event listeners
     /**
-     *
-     * @param e
+     * Handle drag enter event.
+     * @param e Drag event
      */
     function onDragEnter(e: DragEvent) {
       // check if any of the items are files (not strings)
@@ -74,15 +72,15 @@ export default function Dropzone({
       setEnters(enters => enters + 1)
     }
     /**
-     *
-     * @param e
+     * Handle drag over event.
+     * @param e Drag event
      */
     function onDragOver(e: DragEvent) {
       e.preventDefault()
     }
     /**
-     *
-     * @param e
+     * Handle drag leave event.
+     * @param e Drag event
      */
     function onDragLeave(e: DragEvent) {
       const items = e.dataTransfer?.items
@@ -91,8 +89,8 @@ export default function Dropzone({
       setEnters(enters => enters - 1)
     }
     /**
-     *
-     * @param e
+     * Handle file drop event.
+     * @param e Drag event
      */
     function handleFileDrop(e: DragEvent) {
       e.preventDefault()
