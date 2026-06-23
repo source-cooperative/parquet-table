@@ -1,5 +1,5 @@
 import { sortableDataFrame } from 'hightable'
-import { byteLengthFromUrl, parquetMetadataAsync } from 'hyparquet'
+import { parquetMetadataAsync } from 'hyparquet'
 import {
   type AsyncBufferFrom,
   asyncBufferFrom,
@@ -9,6 +9,7 @@ import type { ReactNode } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 
 import Dropzone from './Dropzone.js'
+import { byteLengthFromUrlWithFallback } from './helpers.js'
 import Layout from './Layout.js'
 import Loading from './Loading.js'
 import Page, { type PageProps } from './Page.js'
@@ -58,7 +59,7 @@ export default function App(): ReactNode {
 
   useEffect(() => {
     if (!pageProps && url !== undefined) {
-      byteLengthFromUrl(url)
+      byteLengthFromUrlWithFallback(url)
         .then(byteLength => setAsyncBuffer(url, { url, byteLength }))
         .catch(setUnknownError)
     }
@@ -71,7 +72,7 @@ export default function App(): ReactNode {
       const params = new URLSearchParams(location.search)
       params.set('url', url)
       history.pushState({}, '', `${location.pathname}?${params}`)
-      byteLengthFromUrl(url)
+      byteLengthFromUrlWithFallback(url)
         .then(byteLength => setAsyncBuffer(url, { url, byteLength }))
         .catch(setUnknownError)
     },
