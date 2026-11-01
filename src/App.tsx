@@ -8,6 +8,7 @@ import {
 import type { ReactNode } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 
+import { boundedDataFrame } from './boundedDataFrame.js'
 import Dropzone from './Dropzone.js'
 import Layout from './Layout.js'
 import Loading from './Loading.js'
@@ -37,10 +38,8 @@ export default function App(): ReactNode {
     async function (name: string, from: AsyncBufferFrom) {
       const asyncBuffer = await asyncBufferFrom(from)
       const metadata = await parquetMetadataAsync(asyncBuffer)
-      const df = sortableDataFrame(
-        parquetDataFrame(from, metadata, {
-          utf8: false,
-        }),
+      const df = boundedDataFrame(
+        () => sortableDataFrame(parquetDataFrame(from, metadata, { utf8: false })),
       )
       setPageProps({
         metadata,
